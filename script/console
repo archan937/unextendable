@@ -1,0 +1,2 @@
+#!/usr/bin/env ruby
+system "irb -r ./lib/unextendable.rb -r ./script/definitions.rb"

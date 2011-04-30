@@ -1,0 +1,5 @@
+= Unextendable CHANGELOG
+
+== Version 0.1.0 (April 30, 2011)
+
+* Initial release
