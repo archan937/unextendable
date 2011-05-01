@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Paul Engel"]
   s.email       = ["paul.engel@holder.nl"]
   s.homepage    = "https://github.com/archan937/unextendable"
-  s.summary     = %q{A small gem making unextending extended modules within instances possible}
-  s.description = %q{A small gem making unextending extended modules within instances possible}
+  s.summary     = %q{A small gem making unextending extended module methods within object instances possible}
+  s.description = %q{Unextendable originated from the thought of being able to implement the State pattern within object instances using modules. In other words: I wanted object instances to behave dependent on their state using modules. I really want to use modules because they are commonly used to define a set of methods which you can extend within an object instance. Unfortunately, you cannot just unexclude a module. So after searching the web for solutions, I came across Mixology, evil-ruby and StatePattern. But they slightly did not fit the picture. So after doing some research, I came up with Unextendable.}
 
   s.rubyforge_project = "unextendable"
 

@@ -14,7 +14,7 @@ A gem that allows objects to effectively mixin and unmix modules. The downside i
 
 *Evil-ruby* - "Github repository":https://github.com/yugui/evil-ruby
 
-A gem that extends Ruby's semantics by accessing its internals from pure Ruby code. I do not want to mess with Ruby internals too much just for what I want to implement. As the name already, is it ethical or just evil? I will let you judge that. By the way, "evilr":https://github.com/jeremyevans/evilr is its brother written in C.
+A gem that extends Ruby's semantics by accessing its internals from pure Ruby code. I do not want to mess with Ruby internals too much just for what I want to implement. As the name already says, is it ethical or just evil? I will let you judge that. By the way, "evilr":https://github.com/jeremyevans/evilr is its brother written in C.
 
 *StatePattern* - "Github repository":https://github.com/dcadenas/state_pattern
 
