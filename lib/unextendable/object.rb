@@ -26,12 +26,14 @@ class Object
     end
   end
 
-  def unextend(*modules)
+  def unextend(*modules, &block)
     if modules.empty?
-      meta_class.extended_modules.delete_if{|mod| mod.unextendable?}
+      meta_class.extended_modules.delete_if do |mod|
+        mod.unextendable? if !block_given? || block.call(mod)
+      end
     else
       modules.each do |mod|
-        meta_class.extended_modules.delete mod
+        meta_class.extended_modules.delete mod if !block_given? || block.call(mod)
       end
     end
   end

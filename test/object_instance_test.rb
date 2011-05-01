@@ -143,6 +143,23 @@ class ObjectInstanceTest < Test::Unit::TestCase
             assert !@c.meta_class.extended_modules.include?(U)
           end
 
+          should "remove the module but when passed a block only when it passes" do
+            assert_equal "Mr. C", @c.salutation
+
+            @c.extend U
+            assert_equal "Mr. U", @c.salutation
+
+            @c.unextend do |mod|
+              mod != U
+            end
+            assert_equal "Mr. U", @c.salutation
+
+            @c.unextend do |mod|
+              mod == U
+            end
+            assert_equal "Mr. C", @c.salutation
+          end
+
           context "when calling an unextendable method" do
             should "match the expected method" do
               assert_equal @c.method(:name), @c.send(:method_for, :name)
@@ -206,6 +223,17 @@ class ObjectInstanceTest < Test::Unit::TestCase
               assert_equal "Ms. D", @c.salutation
 
               @c.unextend
+              assert_equal "Ms. A", @c.salutation
+
+              @c.extend U
+              @c.unextend do |mod|
+                mod != U
+              end
+              assert_equal "Ms. U", @c.salutation
+
+              @c.unextend do |mod|
+                mod == U
+              end
               assert_equal "Ms. A", @c.salutation
             end
           end
