@@ -1,10 +1,26 @@
 h1. Unextendable
 
-A small gem making unextending extended modules within instances possible
+A small gem making unextending extended module methods within object instances possible
 
 h2. Introduction
 
-A small gem making unextending extended modules within instances possible
+Unextendable originated from the thought of being able to implement the "State pattern":http://tobyho.com/Design_Patterns_Revisited%3A_State within object instances using modules. In other words: I wanted object instances to behave dependent on their state using modules. I really want to use modules because they are commonly used to define a set of methods which you can extend within an object instance.
+
+But unfortunately, you cannot just unexclude a module. So after searching the web for solutions, I came across the following:
+
+*Mixology* - "Github repository":https://github.com/dan-manges/mixology
+
+A gem that allows objects to effectively mixin and unmix modules. The downside is that it's only implemented for MRI 1.8.x, 1.9.x and JRuby 1.1.x.
+
+*Evil-ruby* - "Github repository":https://github.com/yugui/evil-ruby
+
+A gem that extends Ruby's semantics by accessing its internals from pure Ruby code. I do not want to mess with Ruby internals too much just for what I want to implement. As the name already, is it ethical or just evil? I will let you judge that. By the way, "evilr":https://github.com/jeremyevans/evilr is its brother written in C.
+
+*StatePattern* - "Github repository":https://github.com/dcadenas/state_pattern
+
+A gem that implements the Ruby state pattern. Ouch! I know what you are thinking: "Dude! Didn't you want to implement the state pattern?". Yes, but as I already mentioned I want to use modules and also, I want to implement it as unobtrusive as possible.
+
+So the gems can do the trick, but slightly did not fit the picture. After some further research on Ruby core classes, I got inspired by "Jay Fields' blog article":http://blog.jayfields.com/2007/08/ruby-calling-methods-of-specific.html and "Facets":https://github.com/rubyworks/facets and wrote *Unextendable*! ^^
 
 h2. Installation
 
@@ -36,9 +52,69 @@ Run the following in your console:
   sudo rake gems:install
 </pre>
 
-h2. Getting started
+h2. Example
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Using Unextendable is pretty straightforward: just extend and unextend modules. A few module and class definitions:
+
+<pre>
+  require "rubygems"
+  require "unextendable"
+
+  module A
+    def name
+      "A"
+    end
+  end
+  module U
+    unextendable
+    def name
+      "U"
+    end
+  end
+  module X
+    unextendable
+    def name
+      "X"
+    end
+  end
+  class C
+    attr_accessor :title
+    def salutation
+      [title, name].reject{|x| x.nil? || x.empty?}.join " "
+    end
+    def name
+      "C"
+    end
+  end
+</pre>
+
+After that, you can do the following:
+
+<pre>
+  c = C.new
+  c.title = "Mr."
+  c.salutation #=> "Mr. C"
+  c.extend U
+  c.salutation #=> "Mr. U"
+  c.extend X
+  c.salutation #=> "Mr. X"
+  c.extend U
+  c.salutation #=> "Mr. U"
+  c.unextend
+  c.salutation #=> "Mr. C"
+  c.extend A
+  c.salutation #=> "Mr. A"
+  c.extend X
+  c.salutation #=> "Mr. X"
+  c.unextend
+  c.salutation #=> "Mr. A" (because module A is NOT unextendable)
+</pre>
+
+h2. Last remarks
+
+Please check out "https://github.com/archan937/unextendable/blob/master/test/object_instance_test.rb":https://github.com/archan937/unextendable/blob/master/test/object_instance_test.rb for most of the tests.
+
+Also, the Unextendable repo is provided with @script/console@ which you can run for testing purposes. The module and class definitions are already defined when starting up and the object instance <code>@c</code> of the class @C@ is also defined.
 
 h2. Contact me
 
