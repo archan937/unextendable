@@ -100,11 +100,17 @@ After that, you can do the following:
   c.salutation #=> "Mr. X"
   c.extend U
   c.salutation #=> "Mr. U"
+  c.unextend U
+  c.salutation #=> "Mr. X"
   c.unextend
   c.salutation #=> "Mr. C"
   c.extend A
   c.salutation #=> "Mr. A"
   c.extend X
+  c.salutation #=> "Mr. X"
+  c.unextend do |mod|
+    mod == U
+  end
   c.salutation #=> "Mr. X"
   c.unextend
   c.salutation #=> "Mr. A" (because module A is NOT unextendable)
@@ -112,7 +118,7 @@ After that, you can do the following:
 
 h2. Last remarks
 
-Please check out "https://github.com/archan937/unextendable/blob/master/test/object_instance_test.rb":https://github.com/archan937/unextendable/blob/master/test/object_instance_test.rb for most of the tests.
+Please check out "https://github.com/archan937/unextendable/blob/master/test/object_instance_test.rb":https://github.com/archan937/unextendable/blob/master/test/object_instance_test.rb for most of the tests available. You can run the unit tests with @rake@ within the terminal.
 
 Also, the Unextendable repo is provided with @script/console@ which you can run for testing purposes. The module and class definitions are already defined when starting up and the object instance <code>@c</code> of the class @C@ is also defined.
 

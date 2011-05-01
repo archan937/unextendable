@@ -1,5 +1,9 @@
 = Unextendable CHANGELOG
 
+== Version 0.1.1 (May 1, 2011)
+
+* Being able to pass a block to 'unextend' and only unextending a module when the block passes
+
 == Version 0.1.0 (May 1, 2011)
 
 * Initial release
