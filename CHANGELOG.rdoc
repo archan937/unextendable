@@ -1,8 +1,10 @@
 = Unextendable CHANGELOG
 
-== Version 0.1.2 (May xx, 2011)
+== Version 0.1.2 (May 2, 2011)
 
 * Improved object_instance.unextend
+* Created a single point of definition for determination to whether or not unextend a certain module
+*
 
 == Version 0.1.1 (May 1, 2011)
 

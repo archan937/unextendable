@@ -29,16 +29,20 @@ class Object
   def unextend(*modules, &block)
     if modules.empty?
       meta_class.extended_modules.delete_if do |mod|
-        mod.unextendable? && (!block_given? || block.call(mod))
+        unextend? mod, &block
       end
     else
       modules.each do |mod|
-        meta_class.extended_modules.delete mod if mod.unextendable? && (!block_given? || block.call(mod))
+        meta_class.extended_modules.delete mod if unextend? mod, &block
       end
     end
   end
 
 private
+
+  def unextend?(mod, &block)
+    mod.unextendable? && (!block_given? || !!block.call(mod))
+  end
 
   def wrap_unextendable_module(mod)
     return unless (mod.class == Module) && mod.unextendable?
