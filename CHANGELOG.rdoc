@@ -3,6 +3,7 @@
 == Version 0.1.3 (May 2, 2011)
 
 * Always returning boolean when calling object.meta_class?
+* Corrected the arguments definition of instance.respond_to? (being able to pass include_private)
 
 == Version 0.1.2 (May 2, 2011)
 

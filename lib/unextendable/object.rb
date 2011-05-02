@@ -43,11 +43,11 @@ class Object
     end
   end
 
-  def respond_to?(method_name)
+  def respond_to?(symbol, include_private = false)
     if meta_class? && meta_class.extended_modules.any?{|mod| mod.unextendable?}
-      meta_class.extended_modules.detect{|x| x.instance_methods.include? method_name.to_s} || meta_class.method_procs[method_name.to_s].class == Proc
+      meta_class.extended_modules.detect{|x| x.instance_methods.include? symbol.to_s} || meta_class.method_procs[symbol.to_s].class == Proc
     else
-      !(meta_class? && meta_class.method_procs.key?(method_name.to_s) && meta_class.method_procs[method_name.to_s].nil?) && super
+      !(meta_class? && meta_class.method_procs.key?(symbol.to_s) && meta_class.method_procs[symbol.to_s].nil?) && super
     end
   end
 
