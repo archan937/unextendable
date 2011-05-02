@@ -77,6 +77,9 @@ class ObjectInstanceTest < Test::Unit::TestCase
             def name
               "U"
             end
+            def foo
+              "bar"
+            end
           end
         end
 
@@ -86,8 +89,14 @@ class ObjectInstanceTest < Test::Unit::TestCase
         end
 
         should "call wrap_unextendable_method" do
-          @c.expects(:wrap_unextendable_method)
+          @c.expects(:wrap_unextendable_method).twice
           @c.extend U
+        end
+
+        should "add nil value as method proc when not responding to module method name" do
+          @c.extend U
+          assert_equal 1, @c.meta_class.method_procs.select{|k, v| v.nil?}.size
+          assert_equal 1, @c.meta_class.method_procs.select{|k, v| v.class == Proc}.size
         end
 
         should "add the module to extended_modules" do
@@ -99,7 +108,7 @@ class ObjectInstanceTest < Test::Unit::TestCase
         should "add method proc to method_procs" do
           assert @c.meta_class.send(:method_procs).empty?
           @c.extend U
-          assert_equal 1, @c.meta_class.send(:method_procs).size
+          assert_equal 2, @c.meta_class.send(:method_procs).size
         end
 
         context "when calling an unextendable method" do

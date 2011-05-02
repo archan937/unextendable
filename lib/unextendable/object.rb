@@ -60,7 +60,7 @@ private
   def wrap_unextendable_method(name)
     return if meta_class.method_procs.key? name
 
-    meta_class.method_procs[name] = method(name).to_proc
+    meta_class.method_procs[name] = respond_to?(name) ? method(name).to_proc : nil
 
     instance_eval <<-CODE
       def #{name}(*args, &block)
