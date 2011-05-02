@@ -8,6 +8,11 @@ class Object
   end
   alias :singleton_class :meta_class
 
+  def meta_class?
+    meta_class rescue false
+  end
+  alias :singleton_class? :meta_class?
+
   meta_class do
     def extended_modules
       @extended_modules ||= []
