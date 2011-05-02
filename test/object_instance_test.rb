@@ -185,15 +185,31 @@ class ObjectInstanceTest < Test::Unit::TestCase
               @c.title = "Dr."
               assert_equal "Dr. C", @c.salutation
 
+              assert !@c.respond_to?(:foo)
+              assert_raise NoMethodError do
+                @c.foo
+              end
+
               @c.extend U
               assert_equal "Dr. U", @c.salutation
               @c.title = "Sir"
               assert_equal "Sir U", @c.salutation
 
+              assert @c.respond_to?(:foo)
+              assert_nothing_raised NoMethodError do
+                @c.foo
+              end
+              assert_equal "bar", @c.foo
+
               @c.unextend U
               assert_equal "Sir C", @c.salutation
               @c.title = ""
               assert_equal "C", @c.salutation
+
+              assert !@c.respond_to?(:foo)
+              assert_raise NoMethodError do
+                @c.foo
+              end
 
               @c.extend U
               assert_equal "U", @c.salutation

@@ -6,6 +6,7 @@
 * Created a single point of definition for determination to whether or not unextend a certain module
 * Added object.meta_class? (aliased with singleton_class?)
 * Fixed error raised when trying to wrap a non-existing object instance method
+* Corrected respond_to? and raising NoMethodError when calling an unextended module method which wasn't defined in the object instance itself
 
 == Version 0.1.1 (May 1, 2011)
 

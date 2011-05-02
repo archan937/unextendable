@@ -43,6 +43,14 @@ class Object
     end
   end
 
+  def respond_to?(method_name)
+    if meta_class? && meta_class.extended_modules.any?{|mod| mod.unextendable?}
+      meta_class.extended_modules.detect{|x| x.instance_methods.include? method_name.to_s} || meta_class.method_procs[method_name.to_s].class == Proc
+    else
+      !(meta_class? && meta_class.method_procs.key?(method_name.to_s) && meta_class.method_procs[method_name.to_s].nil?) && super
+    end
+  end
+
 private
 
   def unextend?(mod, &block)
@@ -75,7 +83,11 @@ private
   end
 
   def call_unextendable_method(method_name, *args, &block)
-    method_for(method_name).call(*args, &block)
+    if method = method_for(method_name)
+      method.call(*args, &block)
+    else
+      raise NoMethodError, "undefined method `#{method_name}' for #{self.inspect}"
+    end
   end
 
   def method_for(method_name)
@@ -84,7 +96,9 @@ private
   end
 
   def proc_for(method_name)
-    meta_class.method_procs[method_name.to_s] || method(method_name.to_s)
+    meta_class.method_procs.key?(method_name.to_s) ?
+      meta_class.method_procs[method_name.to_s] :
+      method(method_name.to_s)
   end
 
 end
