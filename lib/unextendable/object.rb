@@ -9,7 +9,7 @@ class Object
   alias :singleton_class :meta_class
 
   def meta_class?
-    meta_class rescue false
+    !!(meta_class rescue false)
   end
   alias :singleton_class? :meta_class?
 
