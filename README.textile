@@ -20,7 +20,13 @@ A gem that extends Ruby's semantics by accessing its internals from pure Ruby co
 
 A gem that implements the Ruby state pattern. Ouch! I know what you are thinking: "Dude! Didn't you want to implement the state pattern?". Yes, but as I already mentioned I want to use modules and also, I want to implement it as unobtrusive as possible.
 
-So the gems can do the trick, but slightly did not fit the picture. After some further research on Ruby core classes, I got inspired by "Jay Fields' blog article":http://blog.jayfields.com/2007/08/ruby-calling-methods-of-specific.html and "Facets":https://github.com/rubyworks/facets and wrote *Unextendable*! ^^
+So the gems can do the trick, but slightly did not fit the picture. After some further research on Ruby core classes, I got inspired by "Jay Fields' blog article":http://blog.jayfields.com/2007/08/ruby-calling-methods-of-specific.html and "Facets":https://github.com/rubyworks/facets and wrote this gem.
+
+h3. Unextendable's advantages
+
+* It does not require altering your Ruby installation
+* It should work on every Ruby installation (the tests are running successfully using *Ruby 1.8.7* and *Ruby 1.9.2*)
+* Implementing Unextendable is straightforward and unobtrusive
 
 h2. Installation
 
@@ -121,6 +127,8 @@ h2. Last remarks
 Please check out "https://github.com/archan937/unextendable/blob/master/test/object_instance_test.rb":https://github.com/archan937/unextendable/blob/master/test/object_instance_test.rb for most of the tests available. You can run the unit tests with @rake@ within the terminal.
 
 Also, the Unextendable repo is provided with @script/console@ which you can run for testing purposes. The module and class definitions are already defined when starting up and the object instance <code>@c</code> of the class @C@ is also defined.
+
+Note: *Unextendable is successfully tested using Ruby 1.8.7 and Ruby 1.9.2*
 
 h2. Contact me
 
