@@ -1,5 +1,9 @@
 = Unextendable CHANGELOG
 
+== Version 0.1.4 (May 4, 2011)
+
+* Improved respond_to? override implementation (overriding respond_to? only once after extending an unextendable module)
+
 == Version 0.1.3 (May 2, 2011)
 
 * Always returning boolean when calling object.meta_class?

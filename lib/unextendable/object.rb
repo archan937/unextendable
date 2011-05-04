@@ -43,14 +43,6 @@ class Object
     end
   end
 
-  def respond_to?(symbol, include_private = false)
-    if meta_class? && meta_class.extended_modules.any?{|mod| mod.unextendable?}
-      meta_class.extended_modules.detect{|x| x.instance_methods.include? symbol.to_s} || meta_class.method_procs[symbol.to_s].class == Proc
-    else
-      !(meta_class? && meta_class.method_procs.key?(symbol.to_s) && meta_class.method_procs[symbol.to_s].nil?) && super
-    end
-  end
-
 private
 
   def unextend?(mod, &block)
@@ -63,6 +55,16 @@ private
     mod.instance_methods.each do |method_name|
       wrap_unextendable_method method_name
     end
+
+    return if @wrapped_respond_to
+
+    instance_eval <<-CODE
+      def respond_to?(symbol, include_private = false)
+        meta_class.extended_modules.detect{|x| x.instance_methods.include? symbol.to_s} || meta_class.method_procs[symbol.to_s].class == Proc
+      end
+    CODE
+
+    @wrapped_respond_to = true
   end
 
   def wrap_unextendable_method(name)
