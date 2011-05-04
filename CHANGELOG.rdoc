@@ -3,6 +3,8 @@
 == Version 0.1.4 (May 4, 2011)
 
 * Improved respond_to? override implementation (overriding respond_to? only once after extending an unextendable module)
+* Moved Object.meta_class to Kernel
+* Removed Object.meta_class?
 
 == Version 0.1.3 (May 2, 2011)
 
