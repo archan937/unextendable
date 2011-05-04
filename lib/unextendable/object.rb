@@ -47,21 +47,21 @@ private
 
     instance_eval <<-CODE
       def respond_to?(symbol, include_private = false)
-        meta_class.extended_modules.detect{|x| x.instance_methods.include? symbol.to_s} || meta_class.method_procs[symbol.to_s].class == Proc
+        meta_class.extended_modules.detect{|x| x.instance_methods.collect(&:to_s).include? symbol.to_s} || meta_class.method_procs[symbol.to_s].class == Proc
       end
     CODE
 
     @wrapped_respond_to = true
   end
 
-  def wrap_unextendable_method(name)
-    return if meta_class.method_procs.key? name
+  def wrap_unextendable_method(method_name)
+    return if meta_class.method_procs.key? method_name.to_s
 
-    meta_class.method_procs[name] = respond_to?(name) ? method(name).to_proc : nil
+    meta_class.method_procs[method_name.to_s] = respond_to?(method_name) ? method(method_name.to_s).to_proc : nil
 
     instance_eval <<-CODE
-      def #{name}(*args, &block)
-        call_unextendable_method :#{name}, *args, &block
+      def #{method_name}(*args, &block)
+        call_unextendable_method :#{method_name}, *args, &block
       end
     CODE
   end
@@ -80,7 +80,7 @@ private
   end
 
   def method_for(method_name)
-    mod = meta_class.extended_modules.detect{|x| x.instance_methods.include? method_name.to_s}
+    mod = meta_class.extended_modules.detect{|x| x.instance_methods.collect(&:to_s).include? method_name.to_s}
     mod ? mod.instance_method(method_name).bind(self) : proc_for(method_name)
   end
 
