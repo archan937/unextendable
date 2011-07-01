@@ -83,6 +83,12 @@ class ObjectInstanceTest < Test::Unit::TestCase
           end
         end
 
+        should "respond to a non-extended instance method after extending" do
+          assert @c.respond_to?(:salutation)
+          @c.extend U
+          assert @c.respond_to?(:salutation)
+        end
+
         should "call wrap_unextendable_module" do
           @c.expects(:wrap_unextendable_module)
           @c.extend A, U
@@ -195,6 +201,7 @@ class ObjectInstanceTest < Test::Unit::TestCase
               @c.title = "Sir"
               assert_equal "Sir U", @c.salutation
 
+              assert @c.respond_to?(:salutation)
               assert @c.respond_to?(:foo)
               assert_nothing_raised NoMethodError do
                 @c.foo
@@ -206,6 +213,7 @@ class ObjectInstanceTest < Test::Unit::TestCase
               @c.title = ""
               assert_equal "C", @c.salutation
 
+              assert  @c.respond_to?(:salutation)
               assert !@c.respond_to?(:foo)
               assert_raise NoMethodError do
                 @c.foo

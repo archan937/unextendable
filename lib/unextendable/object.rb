@@ -47,7 +47,14 @@ private
 
     instance_eval <<-CODE
       def respond_to?(symbol, include_private = false)
-        meta_class.extended_modules.detect{|x| x.instance_methods.collect(&:to_s).include? symbol.to_s} || meta_class.method_procs[symbol.to_s].class == Proc
+        meta_class.extended_modules.any?{|x| x.instance_methods.collect(&:to_s).include? symbol.to_s} ||
+        begin
+          if meta_class.method_procs.has_key? symbol.to_s
+            meta_class.method_procs[symbol.to_s].class == Proc
+          else
+            self.class.instance_methods.collect(&:to_s).include? symbol.to_s
+          end
+        end
       end
     CODE
 
