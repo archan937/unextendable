@@ -1,8 +1,8 @@
 = Unextendable CHANGELOG
 
-== Version 0.1.5 (May xx, 2011)
+== Version 0.1.5 (July 1, 2011)
 
-* Corrected overridden respond_to? method (always returning a boolean)
+* Fixed bug: respond_to? did not return true for a non-overridden instance method after extending an unextendable module
 
 == Version 0.1.4 (May 4, 2011)
 
