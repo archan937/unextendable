@@ -1,5 +1,11 @@
 = Unextendable CHANGELOG
 
+== Version 0.1.6 (January 9, 2012)
+
+* Being able to tackle 'BlankObject instances' when extending:
+  A 'BlankObject class' is considered not to have meta_class and unextend defined, but does respond to extend (e.g. Liquid::Strainer)
+  See also: http://rubydoc.info/gems/liquid/2.3.0/Liquid/Strainer
+
 == Version 0.1.5 (July 1, 2011)
 
 * Fixed bug: respond_to? did not return true for a non-overridden instance method after extending an unextendable module

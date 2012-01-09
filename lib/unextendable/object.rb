@@ -12,20 +12,24 @@ class Object
 
   def extend(*modules)
     modules.each do |mod|
-      wrap_unextendable_module mod if mod.unextendable?
-      add_extended_module mod
+      if respond_to?(:meta_class)
+        wrap_unextendable_module mod if mod.unextendable?
+        add_extended_module mod
+      end
       super(mod)
     end
   end
 
   def unextend(*modules, &block)
-    if modules.empty?
-      meta_class.extended_modules.delete_if do |mod|
-        unextend? mod, &block
-      end
-    else
-      modules.each do |mod|
-        meta_class.extended_modules.delete mod if unextend? mod, &block
+    if respond_to?(:meta_class)
+      if modules.empty?
+        meta_class.extended_modules.delete_if do |mod|
+          unextend? mod, &block
+        end
+      else
+        modules.each do |mod|
+          meta_class.extended_modules.delete mod if unextend? mod, &block
+        end
       end
     end
   end
