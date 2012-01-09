@@ -1,6 +1,6 @@
 require File.expand_path("../test_helper", __FILE__)
 
-class ObjectInstanceTest < Test::Unit::TestCase
+class ObjectTest < Test::Unit::TestCase
 
   context "An object instance" do
     setup do
