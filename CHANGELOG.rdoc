@@ -1,5 +1,9 @@
 = Unextendable CHANGELOG
 
+== Version 0.1.7 (August 15, 2012)
+
+* Support (un-)extending private / protected methods. Thanks Stephan Kaag (@stephankaag) for contributing
+
 == Version 0.1.6 (January 9, 2012)
 
 * Being able to tackle 'BlankObject instances' when extending:
