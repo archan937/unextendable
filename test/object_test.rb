@@ -17,6 +17,10 @@ class ObjectTest < Test::Unit::TestCase
         def name
           "C"
         end
+      private
+        def id
+          "C"
+        end
       end
       @c = C.new
       @c.title = "Mr."
@@ -72,6 +76,14 @@ class ObjectTest < Test::Unit::TestCase
 
       context "which are unextendable" do
         setup do
+          module B
+            unextendable
+            public
+              def id
+                "B"
+              end
+          end
+
           module U
             unextendable
             def name
@@ -79,6 +91,12 @@ class ObjectTest < Test::Unit::TestCase
             end
             def foo
               "bar"
+            end
+
+          private
+
+            def id
+              "U"
             end
           end
         end
@@ -95,14 +113,14 @@ class ObjectTest < Test::Unit::TestCase
         end
 
         should "call wrap_unextendable_method" do
-          @c.expects(:wrap_unextendable_method).twice
+          @c.expects(:wrap_unextendable_method).times(3)
           @c.extend U
         end
 
         should "add nil value as method proc when not responding to module method name" do
           @c.extend U
           assert_equal 1, @c.meta_class.method_procs.select{|k, v| v.nil?}.size
-          assert_equal 1, @c.meta_class.method_procs.select{|k, v| v.class == Proc}.size
+          assert_equal 2, @c.meta_class.method_procs.select{|k, v| v.class == Proc}.size
         end
 
         should "add the module to extended_modules" do
@@ -114,7 +132,7 @@ class ObjectTest < Test::Unit::TestCase
         should "add method proc to method_procs" do
           assert @c.meta_class.send(:method_procs).empty?
           @c.extend U
-          assert_equal 2, @c.meta_class.send(:method_procs).size
+          assert_equal 3, @c.meta_class.send(:method_procs).size
         end
 
         context "when calling an unextendable method" do
@@ -151,11 +169,24 @@ class ObjectTest < Test::Unit::TestCase
 
         context "when unextending the module afterwards" do
           should "remove the module from extended_modules" do
+            exception = assert_raises(NoMethodError) do
+              @c.id
+            end
+            assert_equal "private method `id' called for", exception.message[0..29]
+            assert_equal "C", @c.send(:id)
+
             @c.extend U
             assert @c.meta_class.extended_modules.include?(U)
+            assert_equal "private method `id' called for", exception.message[0..29]
+            assert_equal "U", @c.send(:id)
 
-            @c.unextend U
+            @c.extend B
+            assert_equal "B", @c.send(:id)
+
+            @c.unextend
             assert !@c.meta_class.extended_modules.include?(U)
+            assert_equal "private method `id' called for", exception.message[0..29]
+            assert_equal "C", @c.send(:id)
           end
 
           should "remove the module but when passed a block only when it passes" do
