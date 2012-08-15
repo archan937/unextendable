@@ -43,7 +43,7 @@ private
   def wrap_unextendable_module(mod)
     return unless (mod.class == Module) && mod.unextendable?
 
-    mod.instance_methods.each do |method_name|
+    mod.my_methods.each do |method_name|
       wrap_unextendable_method method_name
     end
 
@@ -51,12 +51,12 @@ private
 
     instance_eval <<-CODE
       def respond_to?(symbol, include_private = false)
-        meta_class.extended_modules.any?{|x| x.instance_methods.collect(&:to_s).include? symbol.to_s} ||
+        meta_class.extended_modules.any?{|x| x.my_methods(include_private).collect(&:to_s).include? symbol.to_s} ||
         begin
           if meta_class.method_procs.has_key? symbol.to_s
             meta_class.method_procs[symbol.to_s].class == Proc
           else
-            self.class.instance_methods.collect(&:to_s).include? symbol.to_s
+            self.class.my_methods(include_private).collect(&:to_s).include? symbol.to_s
           end
         end
       end
@@ -68,7 +68,7 @@ private
   def wrap_unextendable_method(method_name)
     return if meta_class.method_procs.key? method_name.to_s
 
-    meta_class.method_procs[method_name.to_s] = respond_to?(method_name) ? method(method_name.to_s).to_proc : nil
+    meta_class.method_procs[method_name.to_s] = respond_to?(method_name, true) ? method(method_name.to_s).to_proc : nil
 
     instance_eval <<-CODE
       def #{method_name}(*args, &block)
@@ -86,12 +86,13 @@ private
     if method = method_for(method_name)
       method.call(*args, &block)
     else
+      binding.pry if method_name.to_s == "id"
       raise NoMethodError, "undefined method `#{method_name}' for #{self.inspect}"
     end
   end
 
   def method_for(method_name)
-    mod = meta_class.extended_modules.detect{|x| x.instance_methods.collect(&:to_s).include? method_name.to_s}
+    mod = meta_class.extended_modules.detect{|x| x.my_methods.collect(&:to_s).include? method_name.to_s}
     mod ? mod.instance_method(method_name).bind(self) : proc_for(method_name)
   end
 
