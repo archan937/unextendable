@@ -86,7 +86,6 @@ private
     if method = method_for(method_name)
       method.call(*args, &block)
     else
-      binding.pry if method_name.to_s == "id"
       raise NoMethodError, "undefined method `#{method_name}' for #{self.inspect}"
     end
   end

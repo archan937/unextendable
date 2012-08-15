@@ -78,10 +78,10 @@ class ObjectTest < Test::Unit::TestCase
         setup do
           module B
             unextendable
-            public
-              def id
-                "B"
-              end
+          public
+            def id
+              "B"
+            end
           end
 
           module U
@@ -92,9 +92,7 @@ class ObjectTest < Test::Unit::TestCase
             def foo
               "bar"
             end
-
           private
-
             def id
               "U"
             end
