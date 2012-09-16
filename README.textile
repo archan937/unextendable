@@ -1,4 +1,4 @@
-h1. Unextendable
+h1. Unextendable "!https://secure.travis-ci.org/archan937/unextendable.png!":http://travis-ci.org/archan937/unextendable
 
 A small gem making unextending extended module methods within object instances possible
 

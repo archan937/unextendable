@@ -1,2 +1,36 @@
 #!/usr/bin/env ruby
-system "irb -r ./lib/unextendable.rb -r ./script/definitions.rb"
+require "rubygems"
+require "bundler"
+
+Bundler.require :gem_default, :gem_development
+
+puts "Loading Unextendable development environment (#{Unextendable::VERSION})"
+puts "Defining classes ..."
+puts "[0] pry(main)> @c = C.new; @c.title = \"Mr.\""
+
+module A
+  def name
+    "A"
+  end
+end
+
+module U
+  unextendable
+  def name
+    "U"
+  end
+end
+
+class C
+  attr_accessor :title
+  def salutation
+    [title, name].reject{|x| x.nil? || x.empty?}.join " "
+  end
+  def name
+    "C"
+  end
+end
+
+@c = C.new
+@c.title = "Mr."
+Pry.start
